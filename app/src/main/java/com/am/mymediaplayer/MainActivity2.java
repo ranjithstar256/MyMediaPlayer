@@ -16,7 +16,7 @@ public class MainActivity2 extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     String path;
     ImageButton  imageButton;
-
+    Uri uri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,38 +24,32 @@ public class MainActivity2 extends AppCompatActivity {
         mediaPlayer = new MediaPlayer();
         imageButton=findViewById(R.id.imageButton);
         path=getIntent().getStringExtra("songpath");
+        uri = Uri.parse("file://" + path);
+        try {
+            mediaPlayer.setDataSource(MainActivity2.this,uri);
+            mediaPlayer.prepare();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void playy(View view) {
 
         if(mediaPlayer.isPlaying()){
-            mediaPlayer.stop();
+            mediaPlayer.pause();
             imageButton.setBackgroundResource(android.R.drawable.ic_media_play);
-
-
         }
         else {
             imageButton.setBackgroundResource(android.R.drawable.ic_media_pause);
-
-            Uri uri = Uri.parse("file://" + path);
-            try{
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.setDataSource(MainActivity2.this,uri);
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            mediaPlayer.start();
         }
-
     }
 
     public void stp(View view) {
         mediaPlayer.stop();
     }
 
-    public void pau(View view) {
-        mediaPlayer.pause();
-    }
 }
